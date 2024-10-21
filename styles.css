@@ -1,0 +1,51 @@
+body {
+  font-family: Arial, sans-serif;
+  padding: 10px;
+  width: 250px;
+}
+
+h2 {
+  font-size: 18px;
+}
+
+form {
+  margin-top: 10px;
+}
+
+button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+#signature {
+  font-size: 10px;
+  font-weight: 400;
+  padding-top: 10px;
+  margin-bottom: -5px;
+}
+
+#info {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-between; */
+}
+
+#website {
+  font-size: 10px;
+  font-weight: 400;
+  padding-top: 0px;
+  margin-bottom: -5px;
+  /* margin-right: 25px; */
+}
+
+#website:hover {
+  text-decoration: underline;
+}
