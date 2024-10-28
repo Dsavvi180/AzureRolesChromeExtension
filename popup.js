@@ -1,42 +1,3 @@
-// const roles = {
-//   userAdmin: "User Administrator",
-//   helpDeskAdmin: "Helpdesk Administrator",
-//   serviceSupportAdmin: "Service Support Administrator",
-//   exchangeAdmin: "Exchange Administrator",
-//   sharepointAdmin: "SharePoint Administrator",
-//   skypeForBusinessAdmin: "Skype for Business Administrator",
-//   complianceAdmin: "Compliance Administrator",
-//   securityReader: "Security Reader",
-//   dynamics365Admin: "Dynamics 365 Administrator",
-//   fabricAdmin: "Fabric Administrator",
-//   reportsReader: "Reports Reader",
-//   licenseAdmin: "License Administrator",
-//   cloudDeviceAdmin: "Cloud Device Administrator",
-//   teamsAdmin: "Teams Administrator",
-//   globalReader: "Global Reader",
-//   groupsAdmin: "Groups Administrator",
-//   powerPlatformAdmin: "Power Platform Administrator",
-//   officeAppsAdmin: "Office Apps Administrator",
-//   yammerAdmin: "Yammer Administrator",
-// };
-
-// // Dynamically generate checkboxes for each role
-// const roleForm = document.getElementById("roleForm");
-// for (const key in roles) {
-//   if (roles.hasOwnProperty(key)) {
-//     const label = document.createElement("label");
-//     const checkbox = document.createElement("input");
-
-//     checkbox.type = "checkbox";
-//     checkbox.value = roles[key];
-//     label.appendChild(checkbox);
-//     label.appendChild(document.createTextNode(` ${roles[key]}`));
-
-//     roleForm.appendChild(label);
-//     roleForm.appendChild(document.createElement("br"));
-//   }
-// }
-
 document
   .getElementById("activateRolesBtn")
   .addEventListener("click", async () => {
@@ -95,31 +56,53 @@ document
   });
 
 function extractAvailableRoles() {
+  // const activateRoles = Array.from(
+  //   document.getElementsByClassName(
+  //     "ext-aad-role-grid-activate-deactivate-btn fxs-fxclick"
+  //   )
+  // );
+
+  // const availableRoles = [];
+  // activateRoles.forEach((role) => {
+  //   const roleName =
+  //     role.parentNode.parentNode.parentElement.parentElement.parentElement.parentElement.parentElement
+  //       .getElementsByClassName("azc-grid-cell")
+  //       .item(0).innerText;
+  //   availableRoles.push(roleName);
+  // });
+
+  // const activeGroupRoles = (role) => {
+  //   return (
+  //     role.parentNode.parentNode.parentElement.parentElement.parentElement.parentElement.parentElement
+  //       .getElementsByClassName("azc-grid-cell")
+  //       .item(2).innerText != "Direct"
+  //   );
+  // };
+
+  // return availableRoles.filter(activeGroupRoles);
+
   const activateRoles = Array.from(
     document.getElementsByClassName(
       "ext-aad-role-grid-activate-deactivate-btn fxs-fxclick"
     )
   );
 
-  const activeDirectRoles = (role) => {
+  const activeGroupRoles = (role) => {
     return (
       role.parentNode.parentNode.parentElement.parentElement.parentElement.parentElement.parentElement
         .getElementsByClassName("azc-grid-cell")
-        .item(2).innerText === "Direct"
+        .item(2).innerText != "Direct"
     );
   };
-
-  const filteredRoles = activateRoles.filter(activeDirectRoles);
-
+  const nonDirectRoles = activateRoles.filter(activeGroupRoles);
   const availableRoles = [];
-  filteredRoles.forEach((role) => {
+  nonDirectRoles.forEach((role) => {
     const roleName =
       role.parentNode.parentNode.parentElement.parentElement.parentElement.parentElement.parentElement
         .getElementsByClassName("azc-grid-cell")
         .item(0).innerText;
     availableRoles.push(roleName);
   });
-
   return availableRoles;
 }
 
@@ -133,12 +116,12 @@ function activateClientSideRoles(selectedRoles) {
   }
 
   async function clientSideActivation() {
-    const roles = {
-      licenseAdmin: "License Administrator",
-      cloudDeviceAdmin: "Cloud Device Administrator",
-      teamsAdmin: "Teams Administrator",
-      globalReader: "Global Reader",
-    };
+    // const roles = {
+    //   licenseAdmin: "License Administrator",
+    //   cloudDeviceAdmin: "Cloud Device Administrator",
+    //   teamsAdmin: "Teams Administrator",
+    //   globalReader: "Global Reader",
+    // };
 
     for (let roleTitle of selectedRoles) {
       try {
@@ -151,15 +134,15 @@ function activateClientSideRoles(selectedRoles) {
             )
           );
 
-          const activeDirectRoles = (role) => {
+          const activeGroupRoles = (role) => {
             return (
               role.parentNode.parentNode.parentElement.parentElement.parentElement.parentElement.parentElement
                 .getElementsByClassName("azc-grid-cell")
-                .item(2).innerText === "Direct"
+                .item(2).innerText != "Direct"
             );
           };
 
-          return activateRoles.filter(activeDirectRoles);
+          return activateRoles.filter(activeGroupRoles);
         }
 
         const activateRoles = await gatherRoles();
@@ -239,7 +222,7 @@ function activateClientSideRoles(selectedRoles) {
         sleep(1000);
         console.log("Successful activation of ", roleTitle);
       } catch (error) {
-        console.log("Error activating ", roleTitle);
+        console.log("Error activating ", roleTitle, error);
       }
     }
   }

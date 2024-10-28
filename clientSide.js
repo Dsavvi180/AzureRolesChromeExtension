@@ -1,41 +1,16 @@
+// // Not used in Chrome Extension, simply for seperation of function for editing purposes
 async function clientSideActivation() {
   const roles = {
-    userAdmin: "User Administrator",
-    helpDeskAdmin: "Helpdesk Administrator",
-    serviceSupportAdmin: "Service Support Administrator",
-    exchangeAdmin: "Exchange Administrator",
-    sharepointAdmin: "SharePoint Administrator",
-    skypeForBusinessAdmin: "Skype for Business Administrator",
-    complianceAdmin: "Compliance Administrator",
-    securityReader: "Security Reader",
-    dynamics365Admin: "Dynamics 365 Administrator",
-    fabricAdmin: "Fabric Administrator",
-    reportsReader: "Reports Reader",
     licenseAdmin: "License Administrator",
     cloudDeviceAdmin: "Cloud Device Administrator",
     teamsAdmin: "Teams Administrator",
     globalReader: "Global Reader",
-    groupsAdmin: "Groups Administrator",
-    powerPlatformAdmin: "Power Platform Administrator",
-    officeAppsAdmin: "Office Apps Administrator",
-    yammerAdmin: "Yammer Administrator",
   };
 
-  const selectedRoles = [
-    roles.licenseAdmin,
-    roles.cloudDeviceAdmin,
-    roles.teamsAdmin,
-    roles.globalReader,
-  ];
-  const roleActivationReason = [
-    "Daily IT Administration Tasks in Azure Entra and MS Admin Center.",
-  ];
-  async function sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
   for (let roleTitle of selectedRoles) {
     try {
-      sleep(1000);
+      await sleep(1000);
+
       async function gatherRoles() {
         const activateRoles = Array.from(
           document.getElementsByClassName(
@@ -43,15 +18,15 @@ async function clientSideActivation() {
           )
         );
 
-        const activeDirectRoles = (role) => {
+        const activeGroupRoles = (role) => {
           return (
             role.parentNode.parentNode.parentElement.parentElement.parentElement.parentElement.parentElement
               .getElementsByClassName("azc-grid-cell")
-              .item(2).innerText === "Direct"
+              .item(2).innerText != "Direct"
           );
         };
 
-        return activateRoles.filter(activeDirectRoles);
+        return activateRoles.filter(activeGroupRoles);
       }
 
       const activateRoles = await gatherRoles();
@@ -88,14 +63,6 @@ async function clientSideActivation() {
         });
       };
 
-      const awaitWindowReload = async () => {
-        return new Promise((resolve) => {
-          window.addEventListener("load", () => {
-            resolve();
-          });
-        });
-      };
-
       const applyReasonConfirmActivation = async () => {
         return waitForTextArea()
           .then(async (textArea) => {
@@ -103,7 +70,6 @@ async function clientSideActivation() {
             const event = new Event("change");
             textArea.dispatchEvent(event);
             document.getElementsByClassName("fxs-button-text")[1].click();
-            //   await awaitWindowReload();
             document
               .querySelector(
                 'a[data-bind="fxclick: cancelRedirect, text: cancelRedirectText, visible: doTokenRefresh()"]'
@@ -129,7 +95,6 @@ async function clientSideActivation() {
 
       const activateRole = async (roleTitle, activateRoles) => {
         activateRoles.forEach((role) => {
-          // Changed .map to .forEach since we're not returning anything
           if (roleName(role, roleTitle)) {
             role.click();
           }
@@ -140,7 +105,7 @@ async function clientSideActivation() {
       sleep(1000);
       console.log("Successful activation of ", roleTitle);
     } catch (error) {
-      console.log("Error activating ", roleTitle);
+      console.log("Error activating ", roleTitle, error);
     }
   }
 }
