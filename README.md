@@ -12,4 +12,4 @@ This Chrome extension allows users to scrape Azure security roles from the Azure
 ## Installation
 1. Clone this repository:
    ```bash
-   git clone https://github.com/Dsavvi180/AzureSecurityRolesChromeExtension.git
+   git clone https://github.com/Dsavvi180/AzureRolesChromeExtension.git
