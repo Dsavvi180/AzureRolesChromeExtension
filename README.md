@@ -1,4 +1,5 @@
 # Azure Security Roles Chrome Extension
+Download from Chrome Webstore: https://chromewebstore.google.com/detail/azure-roles-activator/ddebbpacbfgkgecjfiabhbmobhjdfbjm
 
 ## Overview
 This Chrome extension allows users to scrape Azure security roles from the Azure portal, dynamically generate checkboxes for these roles, and activate selected roles directly from the extension’s popup.
